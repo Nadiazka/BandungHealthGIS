@@ -32,7 +32,6 @@ class TitikPuskesmas(models.Model):
     	return self.puskesmas
 
 class filter(models.Manager):
-	@classmethod
 	def filterWilayah(self, query=None):
 		qs = self.get_queryset()
 		if query is not None:
@@ -41,7 +40,6 @@ class filter(models.Manager):
 			qs = qs.filter(or_lookup).values('kasus_baru', 'kasus_lama')
 		return qs
 
-	@classmethod
 	def filterPenyakit(self, query=None):
 		qs = self.get_queryset()
 		if query is not None:
@@ -52,7 +50,6 @@ class filter(models.Manager):
 			qs = qs.filter(or_lookup).values('kasus_baru', 'kasus_lama')
 		return qs
 
-	@classmethod
 	def filterJenisKelamin(self, query=None):
 		qs = self.get_queryset()
 		if query is not None:
@@ -60,14 +57,12 @@ class filter(models.Manager):
 		return qs
 	#jangan lupa filter dibawah bisa pake range
 
-	@classmethod
 	def filterUmur(self, query=None):
 		qs = self.get_queryset()
 		if query is not None:
 			qs = qs.filter(kat_pasien__umur__icontains=query).values('kasus_baru', 'kasus_lama')
 		return qs
 
-	@classmethod
 	def filterPeriode(self, query=None):
 		qs = self.get_queryset()
 		if query is not None:
@@ -81,7 +76,7 @@ class Pasien(models.Model):
 	jenis_kelamin = models.CharField(max_length=10)
 
 	def __str__(self):
-		return str(self.kat_pasien)
+		return '%s %s' % (self.umur, self.jenis_kelamin)
 
 class Kecamatan(models.Model):
 	kode_kec = models.CharField(max_length=10, primary_key=True)
@@ -113,7 +108,7 @@ class Indeks(models.Model):
 	deleted = models.SmallIntegerField()
 
 	def __str__(self):
-		return str(self.kode)
+		return str(self.tanggal)
 
 		
 class ICD10_Chapter(models.Model):
@@ -170,7 +165,7 @@ class Kasus(models.Model):
 	objects = filter()
 
 	def __str__(self):
-		return str(self.icd_10)
+		return '%s %s' % (self.kasus_baru, self.kasus_lama)
 
 class Jumlah_Kategori(models.Model):
 	kode = models.ForeignKey(Indeks, on_delete=models.CASCADE)
@@ -178,5 +173,4 @@ class Jumlah_Kategori(models.Model):
 	jumlah_kat = models.PositiveIntegerField()
 
 	def __str__(self):
-		return '%s %s' % (self.kode, self.jumlah_kat)
-																																										
+		return '%s %s' % (self.kat, self.jumlah_kat)

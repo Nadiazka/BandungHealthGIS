@@ -1,3 +1,4 @@
+from django.db.models import Q
 from itertools import chain
 from django.http import JsonResponse
 from rest_framework import generics
@@ -42,7 +43,7 @@ def index(request):
 		'objKasus': objKasus,
 		'objJumlah_Kasus': objJumlah_Kasus
 	}
-	return render (request, 'app_trialv17/indexV1.html', context)
+	return render (request, 'app_trialv17/indexV2.html', context)
 
 
 def get_data(request):
@@ -112,7 +113,34 @@ class PasienAPI(APIView):
 
 class PuskesmasView(generics.ListAPIView):
 	queryset = Puskesmas.objects.all()
-	serializer_class = FilterAPISerializer
+	serializer_class = PuskesmasSerializer
 	filter_backends = [filters.SearchFilter]
 	search_fields = ['nama_pkm']
+
+class IndeksView(generics.ListCreateAPIView):
+	serializer_class = IndeksSerializer
+	#pagination_class = 10
+
+	def get_queryset(self, *args, **kwargs):
+		queryset_list = Indeks.objects.all()
+		query = self.request.GET.get("filter")
+		if query:
+			queryset_list = queryset_list.filter(
+				Q(kode__icontains=query)|
+				Q(tanggal__icontains=query)
+				)
+		return queryset_list
+
+class PuskesmasView2(generics.ListCreateAPIView):
+	serializer_class = PuskesmasSerializer
+
+	def get_queryset(self, *args, **kwargs):
+		queryset_list = Indeks.objects.all()
+		query = self.request.POST.get("q")
+		if query:
+			
+
+			
+			queryset_list = queryset_list.filter(nama_pkm__icontains=query)
+		return queryset_list
 		

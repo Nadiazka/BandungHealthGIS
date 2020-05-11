@@ -11,5 +11,7 @@ urlpatterns =[
 	url(r'^PasienAPI/', views.PasienAPI.as_view()),
 	url(r'^SearchView/', views.SearchView.as_view()),
 	url(r'^PuskesmasView/', views.PuskesmasView.as_view()),
+	url(r'^PuskesmasView2/', views.PuskesmasView.as_view(), name='PuskesmasView2'),
+	url(r'^IndeksView/', views.IndeksView.as_view()),
 	url(r'^titikpuskesmas/', include(router.urls), name='titikpuskesmas'),
 ]

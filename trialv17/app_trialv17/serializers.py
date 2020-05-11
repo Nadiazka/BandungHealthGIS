@@ -17,6 +17,11 @@ class PuskesmasSerializer(serializers.ModelSerializer):
  		model = Puskesmas
  		fields = '__all__'
 
+class IndeksSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Indeks
+		fields = '__all__'
+			
 class TitikPuskesmasSerializer(GeoFeatureModelSerializer):
  	class Meta:
  		model = TitikPuskesmas
@@ -25,10 +30,10 @@ class TitikPuskesmasSerializer(GeoFeatureModelSerializer):
  		fields = '__all__'
 
 class FilterAPISerializer(serializers.ModelSerializer):
-	Pkm = PuskesmasSerializer
+	Pkm = PuskesmasSerializer(many=True, read_only=True)
 	class Meta:
-		model = Kasus
-		fields = ['Pkm', 'kasus_baru']
+		model =  Indeks
+		fields = ['kode','tanggal', 'kode_pkm', 'Pkm']
 			
 		
 """			
